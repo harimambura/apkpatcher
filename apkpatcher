@@ -443,6 +443,8 @@ class Patcher:
             locals_end_index = -1
             if no_prologue_case:
                 locals_end_index = locals_start_index + len('locals X')
+                if content[locals_end_index + 1] != '\r' and content[locals_end_index + 1] != '\n':
+                    locals_end_index += 1
 
             prologue_end_index = -1
             if has_class_constructor and prologue_start_index > -1:
@@ -452,7 +454,7 @@ class Patcher:
                 if no_prologue_case:
                     new_content = content[0:locals_end_index]
 
-                    if content[locals_end_index] == '0':
+                    if content[locals_end_index] == '0' and content[locals_end_index - 1] == ' ':
                         new_content += '1'
                     else:
                         new_content += content[locals_end_index]
